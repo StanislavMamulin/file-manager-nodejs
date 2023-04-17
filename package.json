@@ -1,0 +1,20 @@
+{
+  "name": "file-manager-nodejs",
+  "version": "1.0.0",
+  "description": "CLI File manager",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StanislavMamulin/file-manager-nodejs.git"
+  },
+  "author": "Stanislav Mamulin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StanislavMamulin/file-manager-nodejs/issues"
+  },
+  "homepage": "https://github.com/StanislavMamulin/file-manager-nodejs#readme"
+}
