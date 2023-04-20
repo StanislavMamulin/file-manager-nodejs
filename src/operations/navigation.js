@@ -11,7 +11,7 @@ export const up = () => {
 };
 
 export const cd = async (newPath) => {
-  const wishPath = resolve(currentPath, newPath);
+  const wishPath = resolve(currentPath, newPath || getUserHomedir());
 
   try {
     await checkCdPath(wishPath);
