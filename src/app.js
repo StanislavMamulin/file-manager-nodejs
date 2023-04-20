@@ -1,21 +1,30 @@
-import { showWhereIAm, up } from './operations/navigation.js';
+import { cd, showWhereIAm, up } from './operations/navigation.js';
 import { createInterface } from 'node:readline';
 import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
 
-const inputHandler = (line, rl) => {
-  switch (line) {
-    case '.exit':
-      rl.close();
-      return;
-    case 'up':
-      up();
-      break;
-    default:
-      console.log('Invalid input');
-      return;
+const inputHandler = async (line, rl) => {
+  const [command, ...params] = line.split(' ');
+  try {
+    switch (command) {
+      case '.exit':
+        rl.close();
+        return;
+      case 'up':
+        up();
+        break;
+      case 'cd':
+        await cd(params[0]);
+        break;
+      default:
+        console.log('Invalid input');
+        return;
+    }
+    
+    showWhereIAm();
+  } catch(err) {
+    console.error(`Operation failed: ${err.message}`);
   }
-
-  showWhereIAm();
+  
 }
 
 const app = () => {
@@ -27,7 +36,11 @@ const app = () => {
     output: process.stdout,
   });
 
-  rl.on('line', (line) => inputHandler(line, rl));
+  rl.on('line', (line) => {
+    if (line) {
+      inputHandler(line, rl);
+    }
+  });
   rl.on('close', () => { showGoodbay(userName); });
 };
 
