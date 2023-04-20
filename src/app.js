@@ -1,6 +1,7 @@
 import { cd, showWhereIAm, up } from './operations/navigation.js';
 import { createInterface } from 'node:readline';
 import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
+import { catFile } from './operations/files.js';
 
 const inputHandler = async (line, rl) => {
   const [command, ...params] = line.split(' ');
@@ -15,11 +16,14 @@ const inputHandler = async (line, rl) => {
       case 'cd':
         await cd(params[0]);
         break;
+      case 'cat':
+        await catFile(params[0]);
+        break;
       default:
         console.log('Invalid input');
         return;
     }
-    
+
     showWhereIAm();
   } catch(err) {
     console.error(`Operation failed: ${err.message}`);
