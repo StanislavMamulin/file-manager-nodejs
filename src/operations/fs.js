@@ -1,4 +1,5 @@
 import { stat } from 'node:fs/promises';
+import path from 'node:path';
 
 export const isPathExists = async (path) => {
   try {
@@ -73,3 +74,5 @@ export const checkFileExist = async (path) => {
     throw err;
   }
 }
+
+export const isContainPath = (filename) => filename.includes(path.sep);

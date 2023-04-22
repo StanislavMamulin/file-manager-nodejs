@@ -1,6 +1,7 @@
 import { readFile, rename } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
-import { checkFileExist, isPathExists } from './fs.js';
+import path from 'node:path';
+import { checkFileExist, isContainPath, isPathExists } from './fs.js';
 import { getAbsolutePath } from './navigation.js';
 
 export const catFile = async (filepath) => {
@@ -38,8 +39,12 @@ export const createFile = async (filename) => {
 
 export const renameFile = async (oldPath, newPath) => {
   try {
+    if (isContainPath(newPath)) {
+      throw new Error('The new name must not contain the path, only the new filename');
+    }
+
     const fullOldPath = getAbsolutePath(oldPath);
-    const fullNewPath = getAbsolutePath(newPath);
+    const fullNewPath = path.join(path.dirname(fullOldPath), newPath);
 
     const isSourceExist = await isPathExists(fullOldPath);
     if (!isSourceExist) {
