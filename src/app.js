@@ -1,7 +1,8 @@
 import { cd, showWhereIAm, up } from './operations/navigation.js';
 import { createInterface } from 'node:readline';
 import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
-import { catFile, createFile } from './operations/files.js';
+import { catFile, createFile, renameFile } from './operations/files.js';
+import { checkNumberOfParameters } from './utils/helpers.js';
 
 const inputHandler = async (line, rl) => {
   const [command, ...params] = line.split(' ');
@@ -21,6 +22,12 @@ const inputHandler = async (line, rl) => {
         break;
       case 'add':
         await createFile(params[0]);
+        break;
+      case 'rn':
+        checkNumberOfParameters(params, 2);
+
+        const [oldName, newName] = params;
+        await renameFile(oldName, newName);
         break;
       default:
         console.log('Invalid input');
