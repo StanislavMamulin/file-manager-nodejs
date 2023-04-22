@@ -1,7 +1,7 @@
 import { cd, showWhereIAm, up } from './operations/navigation.js';
 import { createInterface } from 'node:readline';
 import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
-import { catFile } from './operations/files.js';
+import { catFile, createFile } from './operations/files.js';
 
 const inputHandler = async (line, rl) => {
   const [command, ...params] = line.split(' ');
@@ -18,6 +18,9 @@ const inputHandler = async (line, rl) => {
         break;
       case 'cat':
         await catFile(params[0]);
+        break;
+      case 'add':
+        await createFile(params[0]);
         break;
       default:
         console.log('Invalid input');

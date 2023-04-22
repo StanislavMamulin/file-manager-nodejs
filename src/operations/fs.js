@@ -2,7 +2,7 @@ import { stat } from 'node:fs/promises';
 
 export const isPathExists = async (path) => {
   try {
-    const info = await stat(path);
+    await stat(path);
     return true;
   } catch(err) {
     return false;

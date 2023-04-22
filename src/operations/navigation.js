@@ -23,3 +23,4 @@ export const cd = async (newPath) => {
 };
 
 export const getCurrentPath = () => currentPath;
+export const getAbsolutePath = (path) => resolve(getCurrentPath(), path);
