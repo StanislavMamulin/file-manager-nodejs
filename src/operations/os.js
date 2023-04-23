@@ -1,4 +1,4 @@
-import { EOL, cpus, homedir, userInfo } from 'node:os';
+import { EOL, cpus, homedir, userInfo, arch } from 'node:os';
 
 export const getOsInfo = async (infoType) => {
   const type = infoType.slice(2).toLowerCase();
@@ -16,7 +16,9 @@ export const getOsInfo = async (infoType) => {
     case 'homedir':
       return homedir();
     case 'username':
-        return userInfo().username;
+      return userInfo().username;
+    case 'architecture':
+      return arch();
     default:
       throw new Error('Invalid operation parameters');
   }
