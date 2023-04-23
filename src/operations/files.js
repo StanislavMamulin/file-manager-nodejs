@@ -95,3 +95,15 @@ export const copyMoveFile = async ({ filepath, newDirectoryPath, isMove }) => {
     throw err;
   }
 }
+
+export const deleteFile = async (filepath) => {
+  try {
+    const fullFilePath = getAbsolutePath(filepath);
+    await checkFileExist(fullFilePath);
+
+    await rm(fullFilePath);
+    console.log('File deleted');
+  } catch(err) {
+    throw err;
+  }
+}

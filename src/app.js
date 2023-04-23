@@ -1,7 +1,7 @@
 import { cd, showWhereIAm, up } from './operations/navigation.js';
 import { createInterface } from 'node:readline';
 import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
-import { catFile, copyMoveFile, createFile, renameFile } from './operations/files.js';
+import { catFile, copyMoveFile, createFile, deleteFile, renameFile } from './operations/files.js';
 import { checkNumberOfParameters } from './utils/helpers.js';
 
 const inputHandler = async (line, rl) => {
@@ -40,6 +40,13 @@ const inputHandler = async (line, rl) => {
 
         const [moveFilepath, moveToPath] = params;
         await copyMoveFile({ filepath: moveFilepath, newDirectoryPath: moveToPath, isMove: true });
+        break;
+      case 'rm':
+        checkNumberOfParameters(params, 1);
+
+        const [filePath] = params;
+        await deleteFile(filePath);
+
         break;
       default:
         console.log('Invalid input');
