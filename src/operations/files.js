@@ -1,7 +1,7 @@
-import { readFile, rename } from 'node:fs/promises';
-import { createWriteStream } from 'node:fs';
+import { readFile, rename, rm } from 'node:fs/promises';
+import { createReadStream, createWriteStream } from 'node:fs';
 import path from 'node:path';
-import { checkFileExist, isContainPath, isPathExists } from './fs.js';
+import { checkCdPath, checkFileExist, isContainPath, isPathExists } from './fs.js';
 import { getAbsolutePath } from './navigation.js';
 
 export const catFile = async (filepath) => {
@@ -60,3 +60,38 @@ export const renameFile = async (oldPath, newPath) => {
     throw err;
   }
 };
+
+export const copyMoveFile = async ({ filepath, newDirectoryPath, isMove }) => {
+  try {
+    const srcFilename = path.basename(filepath);
+    const fullSrcPath = getAbsolutePath(filepath);
+    const fullDirPath = getAbsolutePath(newDirectoryPath);
+    const fullNewPath = path.join(fullDirPath, srcFilename);
+
+    await checkFileExist(fullSrcPath);
+    await checkCdPath(fullDirPath);
+    const dstFileExist = await isPathExists(fullNewPath);
+    if (dstFileExist) {
+      throw new Error('The file already exists in the destination folder');
+    }
+
+    const writer = createWriteStream(fullNewPath);
+
+    return new Promise((resolve) => {
+      createReadStream(fullSrcPath).pipe(writer);
+      writer.on('finish', async () => {
+
+        if (isMove) {
+          await rm(fullSrcPath);
+          console.log('Move completed')
+        } else {
+          console.log('Copy completed');
+        }
+
+        resolve();
+      })
+    });
+  } catch(err) {
+    throw err;
+  }
+}
