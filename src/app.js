@@ -21,7 +21,12 @@ const inputHandler = async (line, rl) => {
         await cd(params[0]);
         break;
       case 'cat':
-        await catFile(params[0]);
+        checkNumberOfParameters(params, 1);
+
+        const [readFilePath] = params;
+        const filecontent = await catFile(readFilePath);
+        console.log(filecontent);
+  
         break;
       case 'add':
         await createFile(params[0]);

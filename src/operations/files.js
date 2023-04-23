@@ -1,4 +1,4 @@
-import { readFile, rename, rm } from 'node:fs/promises';
+import { rename, rm } from 'node:fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { checkCdPath, checkFileExist, isContainPath, isPathExists } from './fs.js';
@@ -9,8 +9,20 @@ export const catFile = async (filepath) => {
     const fullFilePath = getAbsolutePath(filepath);
     await checkFileExist(fullFilePath);
 
-    const fileContent = await readFile(fullFilePath, { encoding: 'utf-8' });
-    console.log(fileContent);
+    const reader = createReadStream(fullFilePath, {
+      encoding: 'utf-8',
+    });
+
+    return new Promise((resolve) => {
+      let content = '';
+
+      reader.on('data', (chunk) => {
+        content += chunk;
+      });
+      reader.on('end', () => {
+        resolve(content);
+      })
+    });
   } catch(err) {
     throw err;
   }
