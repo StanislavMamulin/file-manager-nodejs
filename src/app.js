@@ -4,6 +4,7 @@ import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
 import { catFile, copyMoveFile, createFile, deleteFile, renameFile } from './operations/files.js';
 import { checkNumberOfParameters } from './utils/helpers.js';
 import { getOsInfo } from './operations/os.js';
+import { calculateHash } from './operations/hash.js';
 
 const inputHandler = async (line, rl) => {
   const [command, ...params] = line.split(' ');
@@ -55,6 +56,14 @@ const inputHandler = async (line, rl) => {
         const [neededInfo] = params;
         const info = await getOsInfo(neededInfo);
         console.log(info);
+
+        break;
+      case 'hash':
+        checkNumberOfParameters(params, 1);
+
+        const [hashFilePath] = params;
+        const hash = await calculateHash(hashFilePath);
+        console.log(hash);
 
         break;
       default:
