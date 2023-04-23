@@ -5,7 +5,7 @@ import { catFile, copyMoveFile, createFile, deleteFile, renameFile } from './ope
 import { checkNumberOfParameters } from './utils/helpers.js';
 import { getOsInfo } from './operations/os.js';
 import { calculateHash } from './operations/hash.js';
-import { compress } from './operations/compress.js';
+import { compress, decompress } from './operations/compress.js';
 
 const inputHandler = async (line, rl) => {
   const [command, ...params] = line.split(' ');
@@ -73,6 +73,14 @@ const inputHandler = async (line, rl) => {
         const [compressFilePath, archivePath] = params;
         const result = await compress(compressFilePath, archivePath);
         console.log(result);
+        break;
+      case 'decompress':
+        checkNumberOfParameters(params, 2);
+
+        const [archiveFilePath, destinationPath] = params;
+        const decompressResult = await decompress(archiveFilePath, destinationPath);
+        console.log(decompressResult);
+
         break;
       default:
         console.log('Invalid input');

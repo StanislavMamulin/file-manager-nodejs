@@ -1,4 +1,4 @@
-import { createBrotliCompress } from 'node:zlib';
+import { createBrotliCompress, createBrotliDecompress } from 'node:zlib';
 import { pipeline } from 'node:stream';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { dirname } from 'node:path';
@@ -38,6 +38,15 @@ export const compress = async (filePath, destPath) => {
   try {
     const successMessage = 'Archive created';
     return archiever(filePath, destPath, createBrotliCompress(), successMessage);
+  } catch(err) {
+    throw err;
+  }
+};
+
+export const decompress = async (filePath, destPath) => {
+  try {
+    const successMessage = 'Decompression completed';
+    return archiever(filePath, destPath, createBrotliDecompress(), successMessage);
   } catch(err) {
     throw err;
   }
