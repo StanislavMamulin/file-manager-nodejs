@@ -1,15 +1,15 @@
 import { createBrotliCompress } from 'node:zlib';
 import { pipeline } from 'node:stream';
 import { createReadStream, createWriteStream } from 'node:fs';
+import { dirname } from 'node:path';
 
 import { getAbsolutePath } from './navigation.js';
 import { checkFileExist, isPathExists } from './fs.js';
-import { dirname } from 'node:path';
 
-export const compress = async (filePath, destPath) => {
+const archiever = async (srcPath, destPath, operation, successMessage) => {
   try {
-    const fullFilePath = getAbsolutePath(filePath);
-    await checkFileExist(fullFilePath);
+    const fullSrcPath = getAbsolutePath(srcPath);
+    await checkFileExist(fullSrcPath);
     
     const fullDestPath = getAbsolutePath(destPath);
     const isDestinationDirExists = await isPathExists(dirname(fullDestPath));
@@ -17,19 +17,27 @@ export const compress = async (filePath, destPath) => {
       throw new Error('Destination directory does not exist');
     }
 
-    const compressor = createBrotliCompress();
-    const source = createReadStream(fullFilePath);
+    const source = createReadStream(fullSrcPath);
     const destination = createWriteStream(fullDestPath);
 
     return new Promise((resolve, reject) => {
-      pipeline(source, compressor, destination, (err) => {
+      pipeline(source, operation, destination, (err) => {
         if (err) {
-          reject('Error creating archive');
+          reject('Archive operation error');
         } else {
-          resolve('Archive created!');
+          resolve(successMessage);
         }
       });
     });
+  } catch(err) {
+    throw err;
+  }
+}
+
+export const compress = async (filePath, destPath) => {
+  try {
+    const successMessage = 'Archive created';
+    return archiever(filePath, destPath, createBrotliCompress(), successMessage);
   } catch(err) {
     throw err;
   }
