@@ -1,4 +1,4 @@
-import { EOL, cpus } from 'node:os';
+import { EOL, cpus, homedir } from 'node:os';
 
 export const getOsInfo = async (infoType) => {
   const type = infoType.slice(2).toLowerCase();
@@ -13,6 +13,8 @@ export const getOsInfo = async (infoType) => {
       ).join('\n');
 
       return `Total CPU: ${cpusAmount}\n${cpusInfo}`;
+    case 'homedir':
+      return homedir();
     default:
       throw new Error('Invalid operation parameters');
   }
