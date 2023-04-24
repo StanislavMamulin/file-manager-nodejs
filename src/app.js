@@ -1,6 +1,6 @@
 import { createInterface } from 'node:readline';
 import { showWhereIAm } from './operations/navigation.js';
-import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
+import { INCORRECT_START_PARAMETERS_MESSAGE, getUserName, showGoodbay, showGreeting } from './utils/user.js';
 import { controller } from './controller.js';
 
 const inputHandler = async (line, rl) => {
@@ -20,7 +20,18 @@ const inputHandler = async (line, rl) => {
 }
 
 const app = () => {
-  const userName = getUserName();
+  const args = process.argv.slice(2);
+
+  if (args.length === 0) {
+    console.log(INCORRECT_START_PARAMETERS_MESSAGE)
+    return;
+  }
+
+  const userName = getUserName(args);
+  if (!userName) {
+    console.log(INCORRECT_START_PARAMETERS_MESSAGE)
+    return;
+  }
   showGreeting(userName);
 
   const rl = createInterface({
