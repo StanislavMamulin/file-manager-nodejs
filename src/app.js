@@ -1,4 +1,4 @@
-import { cd, showWhereIAm, up } from './operations/navigation.js';
+import { cd, listFolderContent, showWhereIAm, up } from './operations/navigation.js';
 import { createInterface } from 'node:readline';
 import { getUserName, showGoodbay, showGreeting } from './utils/user.js';
 import { catFile, copyMoveFile, createFile, deleteFile, renameFile } from './operations/files.js';
@@ -85,6 +85,13 @@ const inputHandler = async (line, rl) => {
         const [archiveFilePath, destinationPath] = params;
         const decompressResult = await decompress(archiveFilePath, destinationPath);
         console.log(decompressResult);
+
+        break;
+      case 'ls':
+        checkNumberOfParameters(params, 0);
+
+        const folderContent = await listFolderContent();
+        console.table(folderContent);
 
         break;
       default:

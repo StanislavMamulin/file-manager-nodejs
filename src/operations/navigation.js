@@ -1,6 +1,8 @@
 import { normalize, resolve } from 'node:path';
+import { readdir } from 'node:fs/promises';
 import { getUserHomedir } from "../utils/path.js";
 import { checkCdPath } from './fs.js';
+import { sortFolderContent } from '../utils/helpers.js';
 
 let currentPath = getUserHomedir();
 
@@ -17,6 +19,21 @@ export const cd = async (newPath) => {
     await checkCdPath(wishPath);
 
     currentPath = wishPath;
+  } catch(err) {
+    throw err;
+  }
+};
+
+export const listFolderContent = async () => {
+  try {
+    const contentDirents = await readdir(getCurrentPath(), { withFileTypes: true });
+    const content = contentDirents.map((dirent) => ({
+      name: dirent.name,
+      type: dirent.isFile() ? 'file' : 'directory',
+    }));
+    const sortedContent = sortFolderContent(content);
+
+    return sortedContent;
   } catch(err) {
     throw err;
   }
