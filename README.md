@@ -13,9 +13,9 @@ The file manager can do the following:
 - Perform hash calculations
 - Compress and decompress files
 
-## Technical requirements
+## Specifications
 
-- No external dependencies should be required
+- No required external dependencies
 - Use 18 LTS version of Node.js
 - The program is started by npm-script `start` in following way:
 ```bash
